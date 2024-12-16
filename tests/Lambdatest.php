@@ -6,10 +6,20 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\Interactions\WebDriverActions;
 use PHPUnit\Framework\Assert;
+use Facebook\WebDriver\WebDriverWait;
+use Facebook\WebDriver\WebDriverExpectedCondition;
+
+# Cargar variables de entorno
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 # Credenciales de LambdaTest
 $LT_USERNAME = getenv("madeludmila");
 $LT_ACCESS_KEY = getenv("aW00OrcRJPxjLBUICMghKjbogTsqPMpmisGPkL5jHYidp2iUxs");
+
+if (!$LT_USERNAME || !$LT_ACCESS_KEY) {
+    die("Las credenciales de LambdaTest no están configuradas correctamente.\n");
+}
 
 # Configuración de LambdaTest
 $host = "http://" . $LT_USERNAME . ":" . $LT_ACCESS_KEY . "@hub.lambdatest.com/wd/hub";
@@ -29,13 +39,17 @@ $capabilities = array(
 
 try {
     $driver = RemoteWebDriver::create($host, $capabilities);
+    $wait = new WebDriverWait($driver, 10);
 
     # Paso 1: Navegar al sitio y completar el onboarding
     $driver->get("https://codelosophy.com/demo-bfore/");
     $actions = new WebDriverActions($driver);
 
     # Simular clics para avanzar en el onboarding
+    $wait->until(WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::cssSelector(".start-onboarding-btn")));
     $driver->findElement(WebDriverBy::cssSelector(".start-onboarding-btn"))->click();
+
+    $wait->until(WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::cssSelector(".industry-select")));
     $driver->findElement(WebDriverBy::cssSelector(".industry-select"))->click();
     $driver->findElement(WebDriverBy::xpath("//option[text()='Manufacturing']"))->click();
 

@@ -1,9 +1,11 @@
 {
-    "require": {
-        "php-webdriver/webdriver": "dev-main",
-        "phpunit/phpunit-selenium": "^8.0.0"
-    },
-    "scripts": {
+  "require": {
+    "php-webdriver/webdriver": "dev-main",
+    "phpunit/phpunit": "^8.0",
+    "phpunit/phpunit-selenium": "8.0.0",
+    "vlucas/phpdotenv": "^5.6"
+  },
+  "scripts": {
     "test": "php Lambdatest.php"
   }
 }
